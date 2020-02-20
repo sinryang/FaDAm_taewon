@@ -1,0 +1,68 @@
+version: '3'
+services:
+    postgres:
+        image: postgres:11
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./tmp/examples/sql/table_creation.sql:/docker-entrypoint-initdb.d/init.sql
+        environment:
+            - POSTGRES_PASSWORD=1234
+            - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+        ports:
+            - 5432:5432
+        restart:
+            always
+        healthcheck:
+            test: "pg_isready -h localhost -p 5432 -q -U postgres"
+            interval: 3s
+            retries: 10
+
+    pgadmin:
+        image: dpage/pgadmin4:4.2
+        volumes:
+            - ./tmp/pgadmin:/var/lib/pgadmin
+            - ./tmp/pgadmin/pgadmin4/servers.json:/pgadmin4/servers.json
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=root@FaDAm.com
+            - PGADMIN_DEFAULT_PASSWORD=1234
+        ports:
+            - 3000:80
+        restart:
+            always
+        depends_on:
+            - postgres
+    web:
+        build:
+            context: ./web
+        environment:
+            TZ: "Asia/Calcutta"
+        ports:
+            - 8888:8888
+        restart:
+            always
+        depends_on:
+            - postgres
+
+    comm_plc:
+        build:
+            context: ./comm_plc
+        environment:
+            TZ: "Asia/Calcutta"
+        restart:
+            always
+        depends_on:
+            - postgres
+
+    cnt_reset:
+        build:
+            context: ./cnt_reset
+        environment:
+            TZ: "Asia/Calcutta"
+        restart:
+            always
+        depends_on:
+            - postgres
+
+volumes:
+    postgres_data:
+        external: true
