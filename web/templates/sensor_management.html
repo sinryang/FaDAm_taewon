@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>FaDAm - Sensor Management</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="{{ static_url("vendor/fontawesome-free/css/all.min.css") }}" rel="stylesheet" type="text/css">
+
+  <!-- Custom styles for this template -->
+  <link href="{{ static_url("css/sb-admin-2.min.css") }}" rel="stylesheet">
+  <link href="{{ static_url("vendor/datatables/dataTables.bootstrap4.min.css") }}" rel="stylesheet">
+  <link href="{{ static_url("css/datepicker.css") }}" rel="stylesheet">
+  <link href="{{ static_url("css/jquery.dataTables.min.css") }}" rel="stylesheet">
+  <link href="{{ static_url("css/select.dataTables.min.css") }}" rel="stylesheet">
+  <link href="{{ static_url("css/buttons.dataTables.min.css") }}" rel="stylesheet">
+  <link href="{{ static_url("css/tabulator.min.css") }}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+      <!-- Sidebar -->
+      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+          <!-- Sidebar - Brand -->
+          <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+            <div class="sidebar-brand-icon rotate-n-15">
+            </div>
+            <div class="sidebar-brand-text mx-3">TEAWON Idustry</div>
+          </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+          <a class="nav-link" href="/">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Data
+        </div>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/data_sheet/export">
+            <i class="fas fa-fw fa-file-export"></i>
+            <span>Data Export</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Sensors
+        </div>
+
+        <!-- Nav Item - Prediction Statistics -->
+        <li class="nav-item active">
+          <a class="nav-link" href="/sensor/management">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Sensor Management</span></a>
+        </li>
+
+
+
+        <!-- Nav Item Icons: "fas fa-fw fa-tachometer-alt", "fas fa-fw fa-cog", "fas fa-fw fa-chart-line", "fas fa-fw fa-wrench", "fas fa-fw fa-folder"-->
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+      </ul>
+      <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+          <!-- Topbar -->
+          <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+              <!-- Topbar Search -->
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+              <div class="input-group">
+
+                <div class="input-group-append">
+
+                </div>
+              </div>
+            </form>
+
+              <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
+
+              <!-- Nav Item - User Information -->
+              <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" id="userDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"><b>FaDAm</b>:<b>Fa</b>ctory <b>D</b>ata <b>A</b>nalysis Syste<b>m</b></span>
+                </a>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                </div>
+              </li>
+
+            </ul>
+
+          </nav>
+          <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">SENSOR MANAGEMENT</h1>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+              <div class = "date_search" style = "margin-left: auto; margin-top: 20px; margin-bottom: -15px; margin-right: 20px; width 100%;">
+
+                  <button id="add_sensor" class="btn btn-primary" style="height:30px;font-size:12px;margin-bottom:10px;margin-top:5px;"data-toggle="modal" data-target="#addModal"> <i class="fas fa-fw fa-plus" ></i> Add </button>
+                  &nbsp
+                  <button id="edit_sensor" class="btn btn-primary" style="height:30px;font-size:12px;margin-bottom:10px;margin-top:5px;"> <i class="fas fa-fw fa-cog" data-toggle="modal" data-target="#editModal"></i> Edit </button>
+                   &nbsp
+                  <button id="delete_sensor" class="btn btn-danger" style="height:30px;font-size:12px;margin-bottom:10px;margin-top:5px;"data-toggle="modal" data-target="#deleteModal"> <i class="fas fa-fw fa-times"></i> Delete </button>
+              </div>
+
+            <div class="card-body">
+              <div class="table-responsive">
+                <div id="data-table"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Jinmyeong Shin 2019</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+
+  <!-- Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Sensor</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            &nbsp Sensor Name </br>
+            &nbsp <input id="sensor_name" name="min" style="width:200px;height:25px"> </br></br>
+            &nbsp IP Address </br>
+            &nbsp <input id="ip" name="min" style="width:200px;height:25px"> </br></br>
+            &nbsp Port No. </br>
+            &nbsp <input id="port" name="min" style="width:200px;height:25px"> </br></br>
+            &nbsp Description </br>
+            &nbsp <input id="description" name="min" style="width:450px;height:25px"> </br></br>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="save_add">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Sensor</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              &nbsp Sensor Name </br>
+              &nbsp <input id="sensor_name_ed" name="min" style="width:200px;height:25px"> </br></br>
+              &nbsp IP Address </br>
+              &nbsp <input id="ip_ed" name="min" style="width:200px;height:25px"> </br></br>
+              &nbsp Port No. </br>
+              &nbsp <input id="port_ed" name="min" style="width:200px;height:25px"> </br></br>
+              &nbsp Description </br>
+              &nbsp <input id="description_ed" name="min" style="width:450px;height:25px"> </br></br>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="save_edit">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Sensor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                The selected sensor will be removed, are you sure?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="save_delete">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="{{ static_url("vendor/jquery/jquery.min.js") }}"></script>
+  <script src="{{ static_url("vendor/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="{{ static_url("vendor/jquery-easing/jquery.easing.min.js") }}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="{{ static_url("js/sb-admin-2.min.js") }}"></script>
+
+  <!-- Page level plugins -->
+  <script src="{{ static_url("vendor/datatables/jquery.dataTables.min.js") }}"></script>
+  <script src="{{ static_url("vendor/datatables/dataTables.bootstrap4.min.js") }}"></script>
+
+  <!-- data editing -->
+  <script src="{{ static_url("js/bootstrap-datepicker.js") }}"></script>
+  <script src="{{ static_url("js/dataTables.buttons.min.js") }}"></script>
+  <script src="{{ static_url("js/dataTables.select.min.js") }}"></script>
+  <script src="{{ static_url("js/altEditor/dataTables.altEditor.free.js") }}"></script>
+
+  <script src="{{ static_url("js/tabulator.min.js") }}"></script>
+
+  <script>
+
+      var table = new Tabulator("#data-table", {
+          layout:"fitDataFill",
+          height:"65vh",
+          selectable:1,
+          columns:[
+              {title:"Sensor ID", field:"id", align:"right"},
+              {title:"IP Address", field:"ip", align:"center"},
+              {title:"Port No.", field:"port", align:"right"},
+              {title:"Sensor Name", field:"sensor_name", align:"center"},
+              {title:"Description", field:"description", align:"center"},
+              {title:"Status", field:"status", align:"center"},
+          ],
+          rowSelectionChanged:function(data, rows){
+              if (data.length == 0) {
+                  $("#delete_sensor").attr('disabled', true);
+                  $("#edit_sensor").attr('disabled', true);
+              } else {
+                  $("#delete_sensor").attr('disabled', false);
+                  $("#edit_sensor").attr('disabled', false);
+              }
+
+          },
+      });
+
+      var load_sensors = function() {
+          $.ajax({
+              type: "POST",
+              url: "/sensor/load",
+              data: JSON.stringify({
+                  table_name: "sensors"
+              }),
+              success : function(res) {
+                  response = JSON.parse(res);
+                  if (response.error) {
+                      alert(response.msg);
+                  } else {
+                      data = JSON.parse(res).data
+                      table.setData(data);
+                  }
+              },
+              error : function(err) {
+                  alert("fail");
+              }
+          });
+      }
+      $(load_sensors());
+
+
+
+      $("#query_by_date").click(function() {
+          if ($("#min_date").val() == '') {
+              min_date = '0001-01-01';
+          } else {
+              min_date = $("#min_date").val();
+          }
+
+          if ($("#max_date").val() == '') {
+              max_date = '9999-12-29';
+          } else {
+              max_date = $("#max_date").val();
+          }
+
+          req_data = JSON.stringify({
+              min_date: min_date,
+              max_date: max_date,
+              table_name: "lvdt_data"
+          });
+
+          $.ajax({
+              type: "POST",
+              url: "/data/export",
+              data: req_data,
+              success : function(res) {
+                  response = JSON.parse(res);
+                  if (response.error) {
+                      alert(response.msg);
+                  } else {
+                      data = JSON.parse(res).data
+                      table.setData(data);
+                  }
+              },
+              error : function(err) {
+                  alert("fail");
+              }
+          });
+      });
+
+      function validateNum(input, min, max) {
+    var num = +input;
+    return num >= min && num <= max && input === num.toString();
+}
+
+      $("#save_add").click(function() {
+          var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+          var sensor_name = $("#sensor_name").val();
+          var ip = $("#ip").val();
+          var port = $("#port").val();
+          var description = $("#description").val();
+
+          if (sensor_name == '') {
+              alert("Please, type the sensor name.");
+              return;
+          }
+
+          if (!ip.match(ipformat)) {
+              alert("Please, check IP address.");
+              return;
+          }
+
+          if (!validateNum(port, 1, 65535)) {
+              alert("Please, check port number.");
+              return;
+          }
+          req_data = JSON.stringify({
+              sensor_name: sensor_name,
+              ip: ip,
+              port: port,
+              description: description,
+              table_name: "sensors"
+          });
+
+          $.ajax({
+              type: "POST",
+              url: "/sensor/add",
+              data: req_data,
+              success : function(res) {
+                  response = JSON.parse(res);
+                  if (response.error) {
+                      alert(response.msg);
+                  } else {
+                      alert('Success.');
+                      $("#addModal").modal('hide');
+                      load_sensors();
+                  }
+              },
+              error : function(err) {
+                  alert("fail");
+              }
+          });
+      });
+
+      $('#edit_sensor').click(function() {
+      	var row = table.getSelectedData()[0];
+
+      	$('#sensor_name_ed').val(row.sensor_name);
+      	$('#ip_ed').val(row.ip);
+      	$('#port_ed').val(row.port);
+      	$('#description_ed').val(row.description);
+
+        $('#editModal').modal('show');
+    });
+
+    $("#save_edit").click(function() {
+        var row = table.getSelectedData()[0];
+
+        var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+        var id = row.id;
+        var sensor_name = $("#sensor_name_ed").val();
+        var ip = $("#ip_ed").val();
+        var port = $("#port_ed").val();
+        var description = $("#description_ed").val();
+
+        if (sensor_name == '') {
+            alert("Please, type the sensor name.");
+            return;
+        }
+
+        if (!ip.match(ipformat)) {
+            alert("Please, check IP address.");
+            return;
+        }
+
+        if (!validateNum(port, 1, 65535)) {
+            alert("Please, check port number.");
+            return;
+        }
+
+        req_data = JSON.stringify({
+            id: id,
+            sensor_name: sensor_name,
+            ip: ip,
+            port: port,
+            description: description,
+            table_name: "sensors"
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/sensor/edit",
+            data: req_data,
+            success : function(res) {
+                response = JSON.parse(res);
+                if (response.error) {
+                    alert(response.msg);
+                } else {
+                    alert('Success.');
+                    $("#editModal").modal('hide');
+                    load_sensors();
+                }
+            },
+            error : function(err) {
+                alert("fail");
+            }
+        });
+    });
+
+    $("#save_delete").click(function() {
+        var row = table.getSelectedData()[0];
+
+        var id = row.id;
+
+        req_data = JSON.stringify({
+            id: id,
+            table_name: "sensors"
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/sensor/delete",
+            data: req_data,
+            success : function(res) {
+                response = JSON.parse(res);
+                if (response.error) {
+                    alert(response.msg);
+                } else {
+                    alert('Success.');
+                    $("#deleteModal").modal('hide');
+                    load_sensors();
+                }
+            },
+            error : function(err) {
+                alert("fail");
+            }
+        });
+    });
+    </script>
+
+</body>
+
+</html>
